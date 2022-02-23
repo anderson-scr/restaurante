@@ -23,6 +23,7 @@ class Ui_login_window(object):
 		login_window.setFont(font)
 		login_window.setStyleSheet(u"")
 		self.login_widget = QWidget(login_window)
+		self.login_widget.setFocusPolicy(Qt.StrongFocus) # Easy game pai
 		self.login_widget.setObjectName(u"login_widget")
 		self.login_widget.setEnabled(True)
 		self.login_widget.setAutoFillBackground(False)
@@ -122,7 +123,7 @@ class Ui_login_window(object):
 		self.cpf_layout.setContentsMargins(-1, 30, -1, 0)
 
 		
-		self.entry_cpf = LineEdit(self.login_entrys) #Mudei pra line edit, esse role deu um trampo
+		self.entry_cpf = QLineEdit(self.login_entrys) #Mudei pra line edit, esse role deu um trampo
 		self.entry_cpf.setObjectName(u"entry_cpf")
 		self.entry_cpf.setEnabled(True)
 		sizePolicy.setHeightForWidth(self.entry_cpf.sizePolicy().hasHeightForWidth())
@@ -131,17 +132,17 @@ class Ui_login_window(object):
 		self.entry_cpf.setMaximumSize(QSize(230, 32))
 		self.entry_cpf.setFocusPolicy(Qt.ClickFocus) #Disabilita o focus na entrada da tela
 		self.entry_cpf.setFont(font2)
+		self.entry_cpf.setPlaceholderText('000.000.000-00')
 		self.entry_cpf.setMouseTracking(True)
-		self.entry_cpf.setCursorPosition(0)
 		self.entry_cpf.setStyleSheet(u"QLineEdit {\n"
 			"	background-color: rgba(0,0,0,0);\n"
-			"	color: rgba(255, 254, 252, 70);\n"
+			"	color: rgb(255, 254, 252);\n"
 			"	border-bottom: 2px solid #85311B;\n"
 			"	qproperty-frame: false;\n"
 			"}\n"
 			"QLineEdit:focus {\n"
 			"	background-color: rgba(255,199,131, .6);\n"
-			"       color: rgb(255, 254, 252);"
+			"   color: rgb(255, 254, 252);"
 			"	border-top-left-radius: 3px;\n"
 			"	border-top-right-radius: 3px;\n"
 			"}\n"
@@ -150,11 +151,13 @@ class Ui_login_window(object):
 			"	border-top-left-radius: 3px;\n"
 			"	border-top-right-radius: 3px;\n"
 		"}")
-		self.entry_cpf.setMaxLength(15)
+
+		
+		self.entry_cpf.setMaxLength(14)
 		# validator = QIntValidator().setRange(0, 99999999999) Erro por causa do tamanho do valor. Usar RegEX
 		# Essa poha limita a length pra 10. Entao tem que usar o regular expression
-		# validator = QRegularExpressionValidator("[0-9.-]*$")
-		# self.entry_cpf.setValidator(validator) #Deixa entrar somente numeros
+		validator = QRegularExpressionValidator("[0-9]*$")
+		self.entry_cpf.setValidator(validator) #Deixa entrar somente numeros
 		self.entry_cpf.setAlignment(Qt.AlignCenter)
 		self.cpf_layout.addWidget(self.entry_cpf)
 
@@ -176,7 +179,7 @@ class Ui_login_window(object):
 		self.cpf_layout.addWidget(self.entry_senha)
 		self.entry_senha.setStyleSheet(u"QLineEdit {\n"
 			"	background-color: rgba(0,0,0,0);\n"
-			"	color: rgba(255, 254, 252, 70);\n"
+			"	color: rgb(255, 254, 252);\n"
 			"	border-bottom: 2px solid #85311B;\n"
 			"	qproperty-frame: false;\n"
 			"}\n"

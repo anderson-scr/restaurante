@@ -1,9 +1,20 @@
+import ctypes
 import sys
 from qt_core import *
 from gui.windows.login_screen.login_window import *
 from gui.windows.login_screen.verify_login import *
 
 class Login_screen(QMainWindow, Ui_login_window):
+	def eventFilter(self, source, event):
+		text = source.text()
+		if event.type() == QEvent.KeyPress:
+			if event.key() not in self.blocked_key and not source.hasSelectedText() and (len(text) == 3 or len(text) == 7 or len(text) == 11):
+				if len(text) != 11: 
+					source.setText(text + '.') 
+				else: 
+					source.setText(text + '-')
+		return False
+
 	def verify_login(self):
 		if self.is_cpf: # Entra se for para verificar CPF's
 			if Login_Verification.cpf_validation(self, self.entry_cpf.text()): # Chama a funcao da classe login_verifications e altera as informacoes da tela.
@@ -30,13 +41,18 @@ class Login_screen(QMainWindow, Ui_login_window):
 		self.setupUi(self)
 		self.user_cpf = ''
 		self.is_cpf = True
+		self.blocked_key = (16777219, 16777223, 16777234, 16777236)
 		self.setWindowTitle('Login Sistema Goublet')
+		self.entry_cpf.installEventFilter(self) # Precisei desse cara para poder usar o evento
 		self.login_button.clicked.connect(self.verify_login) # salva o cpf de entrada no atributo
 
 		
 
 if __name__ == "__main__":
+	myappid = u'mycompany.myproduct.subproduct.version' # arbitrary string
+	ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(myappid)
 	app = QApplication(sys.argv)
+	app.setWindowIcon(QIcon('gui/windows/login_screen/svg_icons/restaurant_logo_white_bg.svg'))
 	window = Login_screen()
 	window.show()
 	sys.exit(app.exec())
